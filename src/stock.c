@@ -26,3 +26,27 @@ struct Memory
     char *data;
     size_t size;
 };
+
+/*  ptr:
+        pointer to the incoming data from libcurl (chunk of HTML).
+    size and nmemb:
+        size of a single element and number of elements (total bytes = size * nmemb).
+    userp:
+        user pointer we passed to libcurl (we use it to pass our Memory struct).
+*/
+static size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userp)
+{
+    size_t total = size * nmemb;
+    struct Memory *mem = (struct Memory *)userp;
+
+    char *temp = realloc(mem->data, mem->size + total + 1);
+    if (!temp)
+        return 0;
+
+    mem->data = temp;
+    memcpy(&(mem->data[mem->size]), ptr, total);
+    mem->size += total;
+    mem->data[mem->size] = 0;
+
+    return total;
+}
