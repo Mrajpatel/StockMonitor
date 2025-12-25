@@ -50,3 +50,9 @@ static size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userp)
 
     return total;
 }
+
+// Fetch price from Yahoo Finance
+int fetch_stock_price(Stock *s)
+{
+    return 0;
+}
